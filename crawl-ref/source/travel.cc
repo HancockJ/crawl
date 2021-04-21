@@ -2684,7 +2684,7 @@ static void _start_translevel_travel()
         }
         else if (level_target.pos.x == -1 || level_target.pos == you.pos())
         {
-            mpr("You're already here!");
+            mpr("You're already here! dummy");
             return;
         }
     }
@@ -3141,9 +3141,17 @@ static bool _find_transtravel_square(const level_pos &target, bool verbose)
             || target.pos.x != -1 && target.pos != you.pos())
         {
             if (!maybe_traversable)
+            {
                 mpr("Sorry, I don't know how to traverse that place.");
+            }     
+            else if(level_target.id == current){
+                mpr("Sorry, I don't know how to get there: Something is in the way");
+            }
             else
-                mpr("Sorry, I don't know how to get there.");
+            {
+                mprf("Sorry, I don't know how to get there: Can't find stair down to: %s", trans_travel_dest.c_str());
+            }
+
         }
     }
 
