@@ -2684,7 +2684,7 @@ static void _start_translevel_travel()
         }
         else if (level_target.pos.x == -1 || level_target.pos == you.pos())
         {
-            mpr("You're already here! dummy");
+            mpr("You're already here!");
             return;
         }
     }

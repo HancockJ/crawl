@@ -336,12 +336,6 @@ bool use_an_item(item_def *&target, int item_type, operation_types oper,
             choice_made = true;
             tmp_tgt = nullptr;
         }
-        else if (keyin == ' ')
-                {
-                    menu.toggle_display_all();
-                    mpr("Jon Crosse is a fag!");
-                    check_item_knowledge();
-                }
         else if (!sel.empty())
         {
             ASSERT(sel.size() == 1);
@@ -545,8 +539,8 @@ static int _move_item_from_floor_to_inv(const item_def &to_get)
         you.last_pickup = tmp_l_p;
     }
     // Get the slot of the last thing picked up
-    // TODO: this is a bit hacky---perhaps it's worth making a function like -
-    // TODO: move_item_to_inv that returns the slot the item moved into
+    // TODO: this is a bit hacky---perhaps it's worth making a function like
+    // move_item_to_inv that returns the slot the item moved into
     else
     {
         ASSERT(you.last_pickup.size() == 1); // Sanity check...
@@ -2265,6 +2259,7 @@ void drink(item_def* potion)
         canned_msg(MSG_TOO_BERSERK);
         return;
     }
+    
     if (!potion)
     {
         string prompt = make_stringf("Quaff which potion??? [Press ^ for [potion %d]]", you.last_pickup.begin()->first.c_str());
