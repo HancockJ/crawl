@@ -257,7 +257,7 @@ bool UseItemMenu::process_key(int key)
  * This function generates a menu containing type_expect items based on the
  * object_class_type to be acted on by another function. First it will list
  * items in inventory, then items on the floor. If the prompt is cancelled,
- * false is returned. If something is successfully choosen, then true is
+ * false is returned. If something is successfully chosen, then true is
  * returned, and at function exit the parameter target points to the object the
  * player chose or to nullptr if the player chose to wield bare hands (this is
  * only possible if item_type is OSEL_WIELD).
@@ -336,6 +336,12 @@ bool use_an_item(item_def *&target, int item_type, operation_types oper,
             choice_made = true;
             tmp_tgt = nullptr;
         }
+        else if (keyin == ' ')
+                {
+                    menu.toggle_display_all();
+                    mpr("Jon Crosse is a fag!");
+                    check_item_knowledge();
+                }
         else if (!sel.empty())
         {
             ASSERT(sel.size() == 1);
@@ -539,8 +545,8 @@ static int _move_item_from_floor_to_inv(const item_def &to_get)
         you.last_pickup = tmp_l_p;
     }
     // Get the slot of the last thing picked up
-    // TODO: this is a bit hacky---perhaps it's worth making a function like
-    // move_item_to_inv that returns the slot the item moved into
+    // TODO: this is a bit hacky---perhaps it's worth making a function like -
+    // TODO: move_item_to_inv that returns the slot the item moved into
     else
     {
         ASSERT(you.last_pickup.size() == 1); // Sanity check...
@@ -2259,13 +2265,12 @@ void drink(item_def* potion)
         canned_msg(MSG_TOO_BERSERK);
         return;
     }
-
     if (!potion)
     {
-        if (!use_an_item(potion, OBJ_POTIONS, OPER_QUAFF, "Drink which item (* to show all)?"))
+        string prompt = make_stringf("Quaff which potion??? [Press ^ for [potion %d]]", you.last_pickup.begin()->first.c_str());
+        if (!use_an_item(potion, OBJ_POTIONS, OPER_QUAFF, prompt))
             return;
     }
-
     if (potion->base_type != OBJ_POTIONS)
     {
         mpr("You can't drink that!");
