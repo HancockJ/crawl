@@ -835,9 +835,7 @@ FixedVector<int, NUM_OBJECT_CLASSES> inv_order(
     OBJ_ORBS,
     OBJ_GOLD);
 
-menu_letter InvMenu::load_items(const vector<item_def>& mitems,
-                                function<MenuEntry* (MenuEntry*)> procfn,
-                                menu_letter ckey, bool sort)
+menu_letter InvMenu::load_items(const vector<item_def>& mitems,function<MenuEntry* (MenuEntry*)> procfn, menu_letter ckey, bool sort)
 {
     vector<const item_def*> xlatitems;
     for (const item_def &item : mitems)
@@ -845,9 +843,7 @@ menu_letter InvMenu::load_items(const vector<item_def>& mitems,
     return load_items(xlatitems, procfn, ckey, sort);
 }
 
-menu_letter InvMenu::load_items(const vector<const item_def*> &mitems,
-                                function<MenuEntry* (MenuEntry*)> procfn,
-                                menu_letter ckey, bool sort)
+menu_letter InvMenu::load_items(const vector<const item_def*> &mitems, function<MenuEntry* (MenuEntry*)> procfn, menu_letter ckey, bool sort)
 {
     FixedVector< int, NUM_OBJECT_CLASSES > inv_class(0);
     for (const item_def * const mitem : mitems)
@@ -865,7 +861,7 @@ menu_letter InvMenu::load_items(const vector<const item_def*> &mitems,
             continue;
 
         string subtitle = item_class_name(i);
-
+	subtitle += "         Damage   Accuracy   Speed";
         // Mention the class selection shortcuts.
         if (is_set(MF_MULTISELECT))
         {
@@ -924,8 +920,9 @@ menu_letter InvMenu::load_items(const vector<const item_def*> &mitems,
                     ie->hotkeys[0] = ckey++;
             }
             do_preselect(ie);
-
-            add_entry(procfn ? procfn(ie) : ie);
+	    char buffer[100];
+	    sprintf(buffer, "%-15s  %5d    %5d        %5d", getWeaponName(*ie->item), getDamage(*ie->item), getAccuracy(*ie->item), getSpeed(*ie->item));
+	    add_entry(new MenuEntry(buffer, MEL_ITEM));
         }
     }
 

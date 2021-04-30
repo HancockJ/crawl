@@ -1536,6 +1536,35 @@ int get_vorpal_type(const item_def &item)
     return ret;
 }
 
+const char *getWeaponName(const item_def &item){
+	if(item.base_type == OBJ_WEAPONS)
+		return Weapon_prop[Weapon_index[item.sub_type]].name;
+	else 
+		return "";
+
+}
+
+int getDamage(const item_def &item){
+	if(item.base_type == OBJ_WEAPONS)
+		return Weapon_prop[Weapon_index[item.sub_type]].dam;
+	else
+	  	return 0;
+}
+
+int getAccuracy(const item_def &item){
+        if(item.base_type == OBJ_WEAPONS)
+                return Weapon_prop[Weapon_index[item.sub_type]].hit;
+	else	       
+		return 0;
+}
+
+int getSpeed(const item_def &item){
+        if(item.base_type == OBJ_WEAPONS)
+                return Weapon_prop[Weapon_index[item.sub_type]].speed;
+        else
+                return DAM_BASH;
+}
+
 int get_damage_type(const item_def &item)
 {
     if (item.base_type == OBJ_WEAPONS)
