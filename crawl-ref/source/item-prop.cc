@@ -1565,6 +1565,13 @@ int getSpeed(const item_def &item){
                 return DAM_BASH;
 }
 
+int getBrand(const item_def &item){
+        if(item.base_type == OBJ_WEAPONS)
+                return Weapon_prop[Weapon_index[item.sub_type]].skill;
+        else
+                return DAM_BASH;
+}
+
 int get_damage_type(const item_def &item)
 {
     if (item.base_type == OBJ_WEAPONS)

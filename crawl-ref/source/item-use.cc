@@ -242,13 +242,18 @@ void UseItemMenu::toggle_inv_or_floor()
 
 bool UseItemMenu::process_key(int key)
 {
-    if (isadigit(key) || key == '*' || key == '\\' || key == ','
+    if (isadigit(key) || key == '$' || key == '*' || key == '\\' || key == ','
         || key == '-' && item_type_filter == OSEL_WIELD)
     {
         lastch = key;
         return false;
     }
     return Menu::process_key(key);
+}
+
+bool use_last_pickup(int item_type, item_def *tmp_tgt)
+{
+    return false;
 }
 
 /**
@@ -312,6 +317,16 @@ bool use_an_item(item_def *&target, int item_type, operation_types oper,
         {
             menu.toggle_display_all();
             continue;
+        }
+        else if (keyin == '$')
+        {
+            // This should be the hotkey to use the last picked up item of class
+            if(!use_last_pickup(item_type, tmp_tgt)){
+                // If you fail to pick up last item, just act like the key wasn't pressed
+                // This is to confirm item pick up is working for that item type
+                continue;
+            }
+            choice_made = true;
         }
         else if (keyin == ',')
         {
@@ -2259,11 +2274,24 @@ void drink(item_def* potion)
         canned_msg(MSG_TOO_BERSERK);
         return;
     }
+<<<<<<< HEAD
 
     if (!potion)
     {
         if (!use_an_item(potion, OBJ_POTIONS, OPER_QUAFF, "Drink which item (* to show all)?"))
             return;
+=======
+    
+    if (!potion)
+    {
+        int last_pickup_index = you.last_pickup.begin()->first;
+        item_def last_picked_up_item = item_from_int(true, last_pickup_index);
+        const char * item = last_picked_up_item.name(DESC_DBNAME).c_str();
+        char str[46];
+        sprintf(str, "Quaff which potion? (Press ^ for [%s])", item);
+        if (!use_an_item(potion, OBJ_POTIONS, OPER_QUAFF, str))
+           return;
+>>>>>>> a7af45d86a936fc75ecd702894d3f0804fe7beb4
     }
     
     if (potion->base_type != OBJ_POTIONS)
