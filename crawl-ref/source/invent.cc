@@ -865,7 +865,9 @@ menu_letter InvMenu::load_items(const vector<const item_def*> &mitems,
             continue;
 
         string subtitle = item_class_name(i);
-	subtitle += "         Damage   Accuracy   Speed";
+	if(subtitle == "Hand Weapons" || subtitle == "Magical Staves" ){
+            subtitle += "         Damage   Accuracy   Speed";
+	}
         // Mention the class selection shortcuts.
         if (is_set(MF_MULTISELECT))
         {
@@ -924,11 +926,13 @@ menu_letter InvMenu::load_items(const vector<const item_def*> &mitems,
                     ie->hotkeys[0] = ckey++;
             }
             do_preselect(ie);
-	    char buffer[100];
-	    sprintf(buffer, "%-15s  %5d    %5d        %5d", 
-		    getWeaponName(*ie->item), getDamage(*ie->item), 
-		    getAccuracy(*ie->item), getSpeed(*ie->item));
-	    add_entry(new MenuEntry(buffer, MEL_ITEM));
+	    if(ie->item->base_type == OBJ_WEAPONS || ie->item->base_type == OBJ_STAVES){
+                char buffer[100];
+	        sprintf(buffer, "%20d    %5d      %5d",
+                        getDamage(*ie->item), getAccuracy(*ie->item), 
+                        getSpeed(*ie->item));
+                add_entry(procfn ? procfn(ie) : ie);
+                add_entry(new MenuEntry(buffer, MEL_ITEM));
         }
     }
 
